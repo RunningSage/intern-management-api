@@ -13,272 +13,398 @@ This RESTful API is designed for managing interns within an organization. It pro
 
 ## API Endpoints
 
-### Intern Management
+### Auth
 
-#### Create Intern
-- **Endpoint:** `POST /api/v1/interns`
-- **Request Body:**
-    ```json
-    {
-      "name": "string",
-      "contact_info": "string",
-      "department": "string",
-      "start_date": "YYYY-MM-DD",
-      "end_date": "YYYY-MM-DD"
-    }
-    ```
-- **Response:**
-    ```json
+#### POST /api/v1/auth/signup
+
+**Description**: Register a new user with the provided email, password, and role.
+
+**Request Body**:
+```json
+{
+  "email": "string",
+  "password": "string",
+  "role": "string"
+}
+```
+
+**Response**:
+```json
+{
+  "userId": "string",
+  "token": "string"
+}
+```
+
+#### POST /api/v1/auth/login
+
+**Description**: Authenticate and log in a user.
+
+**Request Body**:
+```json
+{
+  "email": "string",
+  "password": "string"
+}
+```
+
+**Response**:
+```json
+{
+  "token": "string"
+}
+```
+
+---
+
+### Interns
+
+#### POST /api/v1/interns
+
+**Description**: Create a new intern record.
+
+**Request Body**:
+```json
+{
+  "name": "string",
+  "contactInfo": "string",
+  "department": "string",
+  "startDate": "string",
+  "endDate": "string"
+}
+```
+
+**Response**:
+```json
+{
+  "id": "string",
+  "name": "string",
+  "contactInfo": "string",
+  "department": "string",
+  "startDate": "string",
+  "endDate": "string"
+}
+```
+
+#### GET /api/v1/interns
+
+**Description**: Retrieve a list of interns.
+
+**Query Parameters**:
+- `department` (optional, string): Filter by department.
+- `status` (optional, string): Filter by status.
+- `sortBy` (optional, string): Sort by a specific field.
+- `order` (optional, string): Order of sorting (asc/desc).
+- `page` (optional, integer): Page number.
+- `limit` (optional, integer): Number of results per page.
+
+**Response**:
+```json
+{
+  "interns": [
     {
       "id": "string",
       "name": "string",
-      "contact_info": "string",
+      "contactInfo": "string",
       "department": "string",
-      "start_date": "YYYY-MM-DD",
-      "end_date": "YYYY-MM-DD"
+      "startDate": "string",
+      "endDate": "string"
     }
-    ```
+  ]
+}
+```
 
-#### Retrieve Intern
-- **Endpoint:** `GET /api/v1/interns/:id`
-- **Query Parameters:** Optional filters (e.g., `department`, `status`)
-- **Response:**
-    ```json
-    {
-      "id": "string",
-      "name": "string",
-      "contact_info": "string",
-      "department": "string",
-      "start_date": "YYYY-MM-DD",
-      "end_date": "YYYY-MM-DD"
-    }
-    ```
-- **Response (List):**
-    ```json
-    [
-      {
-        "id": "string",
-        "name": "string",
-        "contact_info": "string",
-        "department": "string",
-        "start_date": "YYYY-MM-DD",
-        "end_date": "YYYY-MM-DD"
-      }
-    ]
-    ```
+#### GET /api/v1/interns/:id
 
-#### Update Intern
-- **Endpoint:** `PUT /api/v1/interns/:id`
-- **Request Body:**
-    ```json
-    {
-      "name": "string",
-      "contact_info": "string",
-      "department": "string",
-      "status": "string"
-    }
-    ```
-- **Response:**
-    ```json
-    {
-      "id": "string",
-      "name": "string",
-      "contact_info": "string",
-      "department": "string",
-      "status": "string"
-    }
-    ```
+**Description**: Retrieve information about a specific intern.
 
-#### Delete Intern
-- **Endpoint:** `DELETE /api/v1/interns/:id`
-- **Response:**
-    ```json
-    {
-      "message": "Intern deleted successfully"
-    }
-    ```
+**Response**:
+```json
+{
+  "internId": "string",
+  "name": "string",
+  "contactInfo": "string",
+  "department": "string",
+  "startDate": "string",
+  "endDate": "string"
+}
+```
 
-### Performance Management
+#### PUT /api/v1/interns/:id
 
-#### Add Performance Record
-- **Endpoint:** `POST /api/v1/interns/:id/performance`
-- **Request Body:**
-    ```json
-    {
-      "metrics": "string",
-      "review": "string"
-    }
-    ```
-- **Response:**
-    ```json
-    {
-      "id": "string",
-      "metrics": "string",
-      "review": "string"
-    }
-    ```
+**Description**: Update information for a specific intern.
 
-#### Retrieve Performance Records
-- **Endpoint:** `GET /api/v1/interns/:id/performance`
-- **Response:**
-    ```json
-    [
-      {
-        "id": "string",
-        "metrics": "string",
-        "review": "string"
-      }
-    ]
-    ```
+**Request Body**:
+```json
+{
+  "contactInfo": "string",
+  "department": "string"
+}
+```
 
-#### Update Performance Record
-- **Endpoint:** `PUT /api/v1/interns/:id/performance/:record_id`
-- **Request Body:**
-    ```json
-    {
-      "metrics": "string",
-      "review": "string"
-    }
-    ```
-- **Response:**
-    ```json
-    {
-      "id": "string",
-      "metrics": "string",
-      "review": "string"
-    }
-    ```
+**Response**:
+```json
+{
+  "id": "string",
+  "name": "string",
+  "contactInfo": "string",
+  "department": "string",
+  "startDate": "string",
+  "endDate": "string"
+}
+```
 
-#### Delete Performance Record
-- **Endpoint:** `DELETE /api/v1/interns/:id/performance/:record_id`
-- **Response:**
-    ```json
-    {
-      "message": "Performance record deleted successfully"
-    }
-    ```
+#### DELETE /api/v1/interns/:id
 
-### Task Management
+**Description**: Delete a specific intern record.
 
-#### Assign Task
-- **Endpoint:** `POST /api/v1/interns/:id/tasks`
-- **Request Body:**
-    ```json
+**Response**:
+```json
+{
+  "message": "Intern deleted successfully"
+}
+```
+
+---
+
+### Tasks
+
+#### POST /api/v1/tasks
+
+**Description**: Create a new task.
+
+**Request Body**:
+```json
+{
+  "internId": "string",
+  "description": "string",
+  "dueDate": "string",
+  "priority": "string",
+  "status": "string"
+}
+```
+
+**Response**:
+```json
+{
+  "taskId": "string",
+  "internId": "string",
+  "description": "string",
+  "dueDate": "string",
+  "priority": "string",
+  "status": "string"
+}
+```
+
+#### GET /api/v1/tasks
+
+**Description**: Retrieve tasks with optional filters.
+
+**Query Parameters**:
+- `status` (optional, string): Filter by status.
+- `priority` (optional, string): Filter by priority.
+
+**Response**:
+```json
+{
+  "tasks": [
     {
+      "taskId": "string",
+      "internId": "string",
       "description": "string",
-      "due_date": "YYYY-MM-DD",
-      "priority": "string"
-    }
-    ```
-- **Response:**
-    ```json
-    {
-      "id": "string",
-      "description": "string",
-      "due_date": "YYYY-MM-DD",
-      "priority": "string"
-    }
-    ```
-
-#### Retrieve Tasks
-- **Endpoint:** `GET /api/v1/interns/:id/tasks`
-- **Response:**
-    ```json
-    [
-      {
-        "id": "string",
-        "description": "string",
-        "due_date": "YYYY-MM-DD",
-        "priority": "string"
-      }
-    ]
-    ```
-
-#### Update Task
-- **Endpoint:** `PUT /api/v1/interns/:id/tasks/:task_id`
-- **Request Body:**
-    ```json
-    {
-      "description": "string",
-      "due_date": "YYYY-MM-DD",
+      "dueDate": "string",
       "priority": "string",
       "status": "string"
     }
-    ```
-- **Response:**
-    ```json
-    {
-      "id": "string",
-      "description": "string",
-      "due_date": "YYYY-MM-DD",
-      "priority": "string",
-      "status": "string"
-    }
-    ```
+  ]
+}
+```
 
-#### Delete Task
-- **Endpoint:** `DELETE /api/v1/interns/:id/tasks/:task_id`
-- **Response:**
-    ```json
-    {
-      "message": "Task deleted successfully"
-    }
-    ```
+#### PUT /api/v1/tasks/:id
 
-### Feedback Management
+**Description**: Update the status of a specific task.
 
-#### Add Feedback
-- **Endpoint:** `POST /api/v1/interns/:id/feedback`
-- **Request Body:**
-    ```json
-    {
-      "feedback": "string"
-    }
-    ```
-- **Response:**
-    ```json
-    {
-      "id": "string",
-      "feedback": "string"
-    }
-    ```
+**Request Body**:
+```json
+{
+  "status": "string"
+}
+```
 
-#### Retrieve Feedback
-- **Endpoint:** `GET /api/v1/interns/:id/feedback`
-- **Response:**
-    ```json
-    [
-      {
-        "id": "string",
-        "feedback": "string"
-      }
-    ]
-    ```
+**Response**:
+```json
+{
+  "taskId": "string",
+  "status": "string"
+}
+```
 
-#### Update Feedback
-- **Endpoint:** `PUT /api/v1/interns/:id/feedback/:feedback_id`
-- **Request Body:**
-    ```json
-    {
-      "feedback": "string"
-    }
-    ```
-- **Response:**
-    ```json
-    {
-      "id": "string",
-      "feedback": "string"
-    }
-    ```
+#### DELETE /api/v1/tasks/:id
 
-#### Delete Feedback
-- **Endpoint:** `DELETE /api/v1/interns/:id/feedback/:feedback_id`
-- **Response:**
-    ```json
+**Description**: Delete a specific task.
+
+**Response**:
+```json
+{
+  "message": "Task deleted successfully"
+}
+```
+
+---
+
+### Performance Records
+
+#### POST /api/v1/performance
+
+**Description**: Add performance metrics for a specific intern.
+
+**Request Body**:
+```json
+{
+  "internId": "string",
+  "performanceMetrics": "string",
+  "date": "string"
+}
+```
+
+**Response**:
+```json
+{
+  "status": "string",
+  "message": "string"
+}
+```
+
+#### GET /api/v1/performance
+
+**Description**: Retrieve performance records for a specific intern.
+
+**Query Parameters**:
+- `internId` (required, string): The ID of the intern.
+- `startDate` (required, string): The start date for performance data.
+- `endDate` (optional, string): The end date for performance data.
+
+**Response**:
+```json
+{
+  "performanceRecords": [
     {
-      "message": "Feedback deleted successfully"
+      "internId": "string",
+      "performanceMetrics": "string",
+      "date": "string"
     }
-    ```
+  ]
+}
+```
+
+#### PUT /api/v1/performance/:id
+
+**Description**: Update performance metrics for a specific record.
+
+**Request Body**:
+```json
+{
+  "performanceMetrics": "string"
+}
+```
+
+**Response**:
+```json
+{
+  "status": "string",
+  "message": "string"
+}
+```
+
+#### DELETE /api/v1/performance/:id
+
+**Description**: Delete a specific performance record.
+
+**Response**:
+```json
+{
+  "message": "Performance record deleted successfully"
+}
+```
+
+---
+
+### Feedback
+
+#### POST /api/v1/feedback
+
+**Description**: Submit feedback for an intern.
+
+**Request Body**:
+```json
+{
+  "internId": "string",
+  "feedback": "string",
+  "date": "string"
+}
+```
+
+**Response**:
+```json
+{
+  "status": "string",
+  "message": "string"
+}
+```
+
+#### GET /api/v1/feedback
+
+**Description**: Retrieve feedback for a specific intern.
+
+**Query Parameters**:
+- `internId` (required, string): The ID of the intern.
+
+**Response**:
+```json
+{
+  "feedbacks": [
+    {
+      "feedbackId": "string",
+      "internId": "string",
+      "feedbackText": "string",
+      "rating": "integer",
+      "feedbackDate": "string"
+    }
+  ]
+}
+```
+
+#### PUT /api/v1/feedback/:id
+
+**Description**: Update feedback for a specific intern.
+
+**Request Body**:
+```json
+{
+  "feedback": "string"
+}
+```
+
+**Response**:
+```json
+{
+  "status": "string",
+  "message": "string"
+}
+```
+
+#### DELETE /api/v1/feedback/:id
+
+**Description**: Delete feedback for a specific intern.
+
+**Response**:
+```json
+{
+  "message": "Feedback deleted successfully"
+}
+```
+
+---
 
 ## Environment Variables
 
@@ -291,7 +417,6 @@ JWT_SECRET=<your_jwt_secret_key>
 DB_PASSWORD=<your_db_password>
 JWT_EXPIRES_IN=1h
 NODE_ENV=development
-
 ```
 
 Replace `<your_mongo_uri>`, `<your_jwt_secret_key>`, and `<your_db_password>` with your actual MongoDB URI, JWT secret key, and database password.
@@ -330,7 +455,4 @@ Use Postman for testing the API endpoints. Import the provided Postman collectio
 
 ## Documentation
 
-API documentation is provided via Postman. You can view the detailed API documentation [here](https://documenter.getpostman.com/view/38127552/2sAXjPzpPH).
-```
-
-This version should fit your `README.md` format. Adjust `<repository_url>` and `<project_directory>` with your actual values.
+API documentation is provided via Postman. You can view the detailed API documentation [here](https://documenter.getpostman.com/view/38127552/2sAXjPzpPH)
