@@ -1,31 +1,51 @@
 const express = require('express');
-const app = express();
 const mongoose = require('mongoose');
-const bodyParser = require('body-parser');
+const cors = require('cors');
+const morgan = require('morgan');
+const errorHandler = require('./middleware/errorMiddleware');
+const dotenv = require('dotenv');
+
+dotenv.config(); 
+
+
 const internRoutes = require('./routes/internRoutes');
-const performanceRecordRoutes = require('./routes/performanceRecordRoutes');
 const taskRoutes = require('./routes/taskRoutes');
+const performanceRoutes = require('./routes/performanceRecordRoutes');
 const feedbackRoutes = require('./routes/feedbackRoutes');
 const authRoutes = require('./routes/authRoutes');
-const errorMiddleware = require('./middleware/errorMiddleware');
 
-require('dotenv').config();
+const app = express();
 
-app.use(bodyParser.json());
 
-app.use('/api/interns', internRoutes);
-app.use('/api/performance-records', performanceRecordRoutes);
-app.use('/api/tasks', taskRoutes);
-app.use('/api/feedback', feedbackRoutes);
-app.use('/api/auth', authRoutes);
+app.use(cors()); 
+app.use(morgan('dev')); 
+app.use(express.json()); 
 
-app.use(errorMiddleware);
+
+app.use('/api/v1/auth',authRoutes)
+app.use('/api/v1/interns', internRoutes);
+app.use('/api/v1/tasks', taskRoutes);
+app.use('/api/v1/performance', performanceRoutes);
+app.use('/api/v1/feedback', feedbackRoutes); 
+
+
+app.use(errorHandler);
+
+
+const connectDB = async () => {
+  try {
+    await mongoose.connect(process.env.MONGO_URI);
+    console.log('MongoDB connected successfully');
+  } catch (err) {
+    console.error('Error connecting to MongoDB:', err.message);
+    process.exit(1); 
+  }
+};
+
+connectDB();
+
 
 const PORT = process.env.PORT || 5000;
-
-mongoose.connect(process.env.MONGO_URI, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-})
-  .then(() => app.listen(PORT, () => console.log(`Server running on port ${PORT}`)))
-  .catch((err) => console.error(err));
+app.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`);
+});
