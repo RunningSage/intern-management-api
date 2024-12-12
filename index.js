@@ -3,11 +3,6 @@ const mongoose = require('mongoose');
 const cors = require('cors');
 const morgan = require('morgan');
 const errorHandler = require('./middleware/errorMiddleware');
-const dotenv = require('dotenv');
-
-dotenv.config(); 
-
-
 const internRoutes = require('./routes/internRoutes');
 const taskRoutes = require('./routes/taskRoutes');
 const performanceRoutes = require('./routes/performanceRecordRoutes');
